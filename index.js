@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 
 const home = require('./routes/home')
 const todo = require('./routes/todo')
+const user = require('./routes/users')
 
 dotenv.config()
 
@@ -19,6 +20,7 @@ mongoose.connect(
 
 app.use('/', home)
 app.use('/todo', todo)
+app.use('/users', user)
 
 const port = process.env.PORT || 3000
 
