@@ -53,34 +53,34 @@ router.post('/login', (req, res) => {
     //Check validation
     if(!isValid) {
         res.status(400).json(errors)
-    }
+    } else {
+        const email = req.body.email
+        const pass = req.body.password
 
-    const email = req.body.email
-    const pass = req.body.password
-
-    User.findOne({ email }).then(user => {
-        if(!user) {
-            errors.email = 'User not found'
-            res.status(400).json(errors)
-        }
-
-        bcrypt.compare(pass, user.password, (err, isMatch) => {
-            if(isMatch) {
-                const payload = {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email
-                }
-
-                jwt.sign(payload, process.env.secretOrKey, { expiresIn: '60s' }, (error, token) => {
-                    res.status(200).json('Bearer ' + token)
-                })
-            } else {
-                errors.password = 'Password incorrect'
+        User.findOne({ email }).then(user => {
+            if(!user) {
+                errors.email = 'User not found'
                 res.status(400).json(errors)
             }
+
+            bcrypt.compare(pass, user.password, (err, isMatch) => {
+                if(isMatch) {
+                    const payload = {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email
+                    }
+
+                    jwt.sign(payload, process.env.secretOrKey, { expiresIn: '60s' }, (error, token) => {
+                        res.status(200).json('Bearer ' + token)
+                    })
+                } else {
+                    errors.password = 'Password incorrect'
+                    res.status(400).json(errors)
+                }
+            })
         })
-    })
+    }
 })
 
 module.exports = router
