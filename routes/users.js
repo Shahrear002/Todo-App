@@ -71,7 +71,7 @@ router.post('/login', (req, res) => {
                         email: user.email
                     }
 
-                    jwt.sign(payload, process.env.secretOrKey, { expiresIn: '60s' }, (error, token) => {
+                    jwt.sign(payload, process.env.secretOrKey, { expiresIn: '180s' }, (error, token) => {
                         res.status(200).json('Bearer ' + token)
                     })
                 } else {
