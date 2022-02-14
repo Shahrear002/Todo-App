@@ -33,7 +33,7 @@ router.post('/add-todo', passport.authenticate('jwt', { session: false }), (req,
     }   
 })
 
-// @route POST todo/delete-todo
+// @route GET todo/delete-todo
 // @description delete todo
 // @access Private
 router.get('/delete-todo/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
@@ -42,6 +42,17 @@ router.get('/delete-todo/:id', passport.authenticate('jwt', { session: false }),
     Todo_model.deleteOne(id).then(() => {
         console.log('deleted!')
         res.status(200).send('Task Deleted')
+    }).catch(err => console.log(err))
+})
+
+// @route GET todo/update-todo
+// @description adding todo
+// @access Private
+router.get('/update-todo/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const id = req.params
+
+    Todo_model.updateOne({id}, { done: true }).then(() => {
+        res.status(200).json('Task done!')
     }).catch(err => console.log(err))
 })
 
