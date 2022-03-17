@@ -51,7 +51,7 @@
             const token = res.data.token
             const user = res.data.user
             delete user.password
-            console.log(token)
+            // console.log(token)
             this.setToken(token)
             this.setUser(user)
           }).catch(error => {
