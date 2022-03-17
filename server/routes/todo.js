@@ -12,9 +12,9 @@ const validateTodoInput = require('../validation/todo')
 // @route GET todo/
 // @description get all todos of a user
 // @access Private
-router.get('/:user_id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    const { id } = req.params
-    
+router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
+    const { id } = req.user
+    console.log(id)
     Todo.find({ user: id }).then(todos => {
         res.status(200).json(todos)
     }).catch(error => console.log(error))

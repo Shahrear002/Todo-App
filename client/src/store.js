@@ -1,28 +1,38 @@
-import { createApp } from 'vue'
+// import { createApp } from 'vue'
 import { createStore } from 'vuex'
-import App from './App.vue'
 
 const store = createStore({
-    state() {
-        return {
-            user: null,
-            token: null
+    state: {
+        user: null,
+        token: null
+    },
+    getters: {
+        getUser: (state) => {
+            return state.user
+        },
+        getToken: (state) => {
+            console.log(state.token)
+            return state.token
         }
     },
     mutations: {
-        setUser(state, user) {
+        setUser: (state, user) => {
             state.user = user
         },
-        setToken(state, token) {
+        setToken: (state, token) => {
             state.token = token
         }
     },
-    actions: {},
-    getters: {}
+    actions: {
+        setUser: ({ commit }, user) => {
+            commit('setUser', user)
+        },
+        setToken: ({ commit }, token) => {
+            commit('setToken', token)
+        },
+    }
 })
 
-const app = createApp(App)
 
-app.use(store)
 
 export default store

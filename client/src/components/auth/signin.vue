@@ -33,32 +33,46 @@
     data() {
       return {
         email: '',
-        password: '',
-        errors: {}
+        password: ''
       }
     },
     methods: {
-      ...mapMutations(["setUser","setToken"]),
-      onSubmit() {
+      ...mapMutations([
+        'setUser',
+        'setToken'
+        ]),
+      async onSubmit() {
         const formData = {
           email: this.email,
           password: this.password
         }
         // console.log(formData)
-        axios.post('/users/login', formData)
-          .then(res => {
-            // console.log(res.data.user)
-            const token = res.data.token
-            const user = res.data.user
-            delete user.password
-            // console.log(token)
-            this.setToken(token)
-            this.setUser(user)
-          }).catch(error => {
-              if(error.response) {
-                this.errors = error.response.data
-              }
-          })
+        try {
+          let response = await axios.post('/users/login', formData)
+          console.log(response.data.token)
+          // this.$store.dispatch('setToken', response.data.token)
+          this.setUser(response.data.user)
+          this.setToken(response.data.token)
+          this.$router.push("/")
+        } catch (error) {
+          console.log(error.response)
+        }
+        // axios.post('/users/login', formData)
+        //   .then(res => {
+        //     user = res.data.user
+        //     delete user.password
+        //     console.log(user)
+        //     // this.$store.dispatch('setUser', user)
+        //     // console.log(res.data.user)
+        //     token = res.data.token
+        //     console.log(token)
+        //     // this.$store.dispatch('setToken', token)
+        //   }).catch(error => {
+        //       if(error.response) {
+        //         this.errors = error.response.data
+        //       }
+        //   })
+        //   console.log('token ' + token)
       }
     }
   }
