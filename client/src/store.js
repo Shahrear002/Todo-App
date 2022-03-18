@@ -1,5 +1,6 @@
 // import { createApp } from 'vue'
 import { createStore } from 'vuex'
+import router from './router'
 
 const store = createStore({
     state: {
@@ -11,7 +12,6 @@ const store = createStore({
             return state.user
         },
         getToken: (state) => {
-            console.log(state.token)
             return state.token
         }
     },
@@ -21,6 +21,12 @@ const store = createStore({
         },
         setToken: (state, token) => {
             state.token = token
+        },
+        updateToken: (state, token) => {
+            state.token = token
+        },
+        logout: state => {
+            state.token = null
         }
     },
     actions: {
@@ -30,6 +36,14 @@ const store = createStore({
         setToken: ({ commit }, token) => {
             commit('setToken', token)
         },
+        fetchToken: ({ commit }) => {
+            commit('updateToken', localStorage.getItem('token'))
+        },
+        logout: ({ commit }) => {
+            localStorage.removeItem('token')
+            commit('logout')
+            router.push('/signin')
+        }
     }
 })
 
