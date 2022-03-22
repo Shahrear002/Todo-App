@@ -6,11 +6,12 @@ import createPersistedState from 'vuex-persistedstate'
 const store = createStore({
     state: {
         user: null,
-        token: null
+        token: null,
+        todos: null
     },
     plugins: [ 
         createPersistedState({
-            paths: ['user', 'token']
+            paths: ['user', 'token', 'todos']
         }) 
     ],
     getters: {
@@ -19,6 +20,9 @@ const store = createStore({
         },
         getToken: (state) => {
             return state.token
+        },
+        getTodos: (state) => {
+            return state.todos
         }
     },
     mutations: {
@@ -30,6 +34,9 @@ const store = createStore({
         },
         updateToken: (state, token) => {
             state.token = token
+        },
+        setTodos: (state, todos) => {
+            state.todos = todos
         },
         logout: state => {
             localStorage.removeItem('token')

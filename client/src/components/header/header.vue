@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a href="#" class="navbar-brand">{{ user.name.split(' ').slice(0, 1).join() }}'s To-Do</a>
+            <a href="#" id="logo" class="navbar-brand">{{ user.name.split(' ').slice(0, 1).join() }}'s To-Do</a>
             <button type="button" class="btn btn-danger navbar-btn" @click="logout">Logout</button>
         </div>
     </nav>
@@ -23,7 +23,7 @@
 </script>
 
 <style scoped>
-    .logo {
+    #logo {
         border-radius: 64px;
         height: 38px;
     }

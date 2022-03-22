@@ -33,7 +33,8 @@
     data() {
       return {
         email: '',
-        password: ''
+        password: '',
+        user: null
       }
     },
     methods: {
@@ -49,7 +50,8 @@
         // console.log(formData)
         try {
           let response = await axios.post('/users/login', formData)
-          console.log(response.data.user)
+          // console.log(response.data.user)
+          this.user = response.data.user
           localStorage.setItem('token', response.data.token)
           this.setUser(response.data.user)
           this.setToken(response.data.token)
@@ -63,7 +65,7 @@
       setTimeout(() => {
         this.$store.dispatch('logout')
       }, 1200000)
-    }
+    },
   }
 
 </script>
