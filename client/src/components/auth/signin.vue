@@ -49,15 +49,20 @@
         // console.log(formData)
         try {
           let response = await axios.post('/users/login', formData)
-          // console.log(response.data.token)
+          console.log(response.data.user)
           localStorage.setItem('token', response.data.token)
           this.setUser(response.data.user)
           this.setToken(response.data.token)
           this.$router.push("/")
         } catch (error) {
-          console.log(error.response)
+            console.log(error.response.data)
         }
       }
+    },
+    created() {
+      setTimeout(() => {
+        this.$store.dispatch('logout')
+      }, 1200000)
     }
   }
 

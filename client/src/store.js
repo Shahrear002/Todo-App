@@ -1,12 +1,18 @@
-// import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import router from './router'
+import createPersistedState from 'vuex-persistedstate'
+// import VueJwtDecode from 'vue-jwt-decode'
 
 const store = createStore({
     state: {
         user: null,
         token: null
     },
+    plugins: [ 
+        createPersistedState({
+            paths: ['user', 'token']
+        }) 
+    ],
     getters: {
         getUser: (state) => {
             return state.user
@@ -26,7 +32,9 @@ const store = createStore({
             state.token = token
         },
         logout: state => {
+            localStorage.removeItem('token')
             state.token = null
+            router.push('/signin')
         }
     },
     actions: {
@@ -40,13 +48,9 @@ const store = createStore({
             commit('updateToken', localStorage.getItem('token'))
         },
         logout: ({ commit }) => {
-            localStorage.removeItem('token')
             commit('logout')
-            router.push('/signin')
         }
     }
 })
-
-
 
 export default store

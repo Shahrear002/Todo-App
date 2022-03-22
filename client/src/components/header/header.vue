@@ -1,14 +1,21 @@
 <template>
-    <nav class="navbar navbar-light bg-light">
-        <span class="navbar-brand mb-0 h1">TO DO APP</span>
-        <button type="button" class="btn btn-outline-light" @click="logout">Logout</button>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">{{ user.name.split(' ').slice(0, 1).join() }}'s To-Do</a>
+            <button type="button" class="btn btn-danger navbar-btn" @click="logout">Logout</button>
+        </div>
     </nav>
 </template>
 
 <script>
-    import { mapActions } from 'vuex'
+    import { mapActions, mapState } from 'vuex'
     
     export default {
+        computed: {
+            ...mapState({
+                user: 'user'
+            })
+        },
         methods: {
             ...mapActions(['logout'])
         }
@@ -16,7 +23,12 @@
 </script>
 
 <style scoped>
-  nav {
-    height: 100%;
-  }
+    .logo {
+        border-radius: 64px;
+        height: 38px;
+    }
+
+    nav {
+        height: 100%;
+    }
 </style>

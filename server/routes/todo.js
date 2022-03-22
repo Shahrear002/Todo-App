@@ -14,7 +14,7 @@ const validateTodoInput = require('../validation/todo')
 // @access Private
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     const { id } = req.user
-    console.log(id)
+    
     Todo.find({ user: id }).then(todos => {
         res.status(200).json(todos)
     }).catch(error => console.log(error))

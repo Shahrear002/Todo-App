@@ -3,6 +3,7 @@
     <div class="home">
         <div class="submit">
           <button type="submit" @click="getTodos">Submit</button>
+          <button type="success" @click="autoLogout">Decode</button>
         </div>
         <ul>
             <li v-for="todo in todos" :key="todo.todo">{{ todo.todo }}</li>
@@ -13,7 +14,7 @@
 <script>
     import header from '../header/header.vue'
     import axios from 'axios'
-    import { mapGetters } from 'vuex'
+    import { mapActions, mapGetters } from 'vuex'
 
     export default {
         components: { 
@@ -21,23 +22,29 @@
         },
         data() {
             return {
-                user_id: null,
                 token: null,
-                todos: {}
+                todos: {},
+                errMessage: null
             }
         },
-        methods: {
+        computed: {
             ...mapGetters(["getToken", "getUser"]),
+            ...mapActions(['autoLogout', 'logout'])
+        },
+        methods: {
+            // ...mapGetters(["getToken", "getUser"]),
             async getTodos() {
                 try {
                     this.token = this.$store.getters.getToken
-                    this.user_id = this.$store.getters.getUser._id
-                    // console.log(this.token)
-                    // console.log(this.user_id)
+                    console.log('token ' + this.token)
+                    // console.log('userID ' + this.user_id)
                     let response = await axios.get('/todo/', { headers: { "Authorization":  `${this.token}`} })
-                    console.log(response.data)
                     this.todos = response.data
                 } catch (error) {
+                    if(error.response.status === 401) {
+                        this.errMessage = 'Session expired! Log In again.'
+                        this.$store.dispatch('logout')
+                    }
                     console.log(error.response)
                 }
             }
