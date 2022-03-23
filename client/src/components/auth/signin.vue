@@ -1,10 +1,11 @@
 <template>
   <div id="signin">
     <div class="signin-form">
-      <h1>To-Do App</h1>
+      <h1 style="text-align: center">To-Do App</h1>
       <form @submit.prevent="onSubmit">
         <div class="input">
           <label for="email">Email</label>
+          <p v-if="errors.email" class="alert alert-danger">{{ errors.email }}</p>
           <input 
             type="email"
             id="email"
@@ -12,6 +13,7 @@
         </div>
         <div class="input">
           <label for="password">Password</label>
+          <p v-if="errors.password" class="alert alert-danger">{{ errors.password }}</p>
           <input 
             type="password"
             id="password"
@@ -21,6 +23,7 @@
           <button type="submit">Submit</button>
         </div>
       </form>
+      <p style="text-align: center; padding-top: 10px">Don't have an account ? <a href="/signup">Register</a></p>
     </div>
   </div>
 </template>
@@ -34,7 +37,8 @@
       return {
         email: '',
         password: '',
-        user: null
+        user: null,
+        errors: {}
       }
     },
     methods: {
@@ -55,15 +59,17 @@
           localStorage.setItem('token', response.data.token)
           this.setUser(response.data.user)
           this.setToken(response.data.token)
+          this.$store.dispatch('autoLogout')
           this.$router.push("/")
         } catch (error) {
-            console.log(error.response.data)
+            this.errors = error.response.data
+            console.log(this.errors)
         }
       }
     },
-    created() {
-      this.$store.dispatch('autoLogout')
-    },
+    // created() {
+    //   this.$store.dispatch('autoLogout')
+    // },
   }
 
 </script>

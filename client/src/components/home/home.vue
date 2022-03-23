@@ -1,10 +1,11 @@
 <template>
     <app-header></app-header>
     <div class="container mt-5">
-        <form class="d-flex" @submit="addTodo">
+        <form class="d-flex" @submit.prevent="addTodo" style="padding-bottom: 10px">
             <input type="text" class="form-control" placeholder="Enter Todo" v-model="todo">
             <input type="submit" value="Add" class="btn btn-md btn-primary mx-3">
         </form>
+        <p v-if="errors" class="alert alert-danger">{{ errors }}</p>
         <ul class="list-group mt-5">
             <li class="list-group-item hov libasic" 
                 v-for="todo in todos" :key="todo.todo"
@@ -32,7 +33,7 @@
         data() {
             return {
                 todo: null,
-                errMessage: null
+                errors: null
             }
         },
         computed: {
@@ -45,24 +46,26 @@
             async addTodo() {
                 try {
                     let token = this.$store.getters.getToken
-                    console.log('token ' + token)
-                    console.log('todo ' + this.todo)
-                    // console.log('userID ' + this.user_id)
+                    // console.log('token ' + token)
+                    // console.log('todo ' + this.todo)
                     let response = await axios.post('/todo/add-todo', { todo: this.todo }, { headers: { "Authorization":  `${token}`} })
                     this.todos = response.data
+                    window.location.reload()
                 } catch (error) {
-                    console.log(error.response)
+                    this.errors = error.response.data
+                    console.log(this.errors)
                 }
             },
             async updateTodo(id) {
                 try {
                     let token = this.$store.getters.getToken
                     let response = await axios.put('/todo/update-todo/' + id, {}, { headers: { "Authorization": `${token}`}})
-                    console.log('response' + response.data)
+                    // console.log('response' + response.data)
                     this.todos = response.data
                     window.location.reload()
                 } catch(error) {
-                    console.log(error.response)
+                    this.errors = error.response.data
+                    console.log(this.errors)
                 }
             },
             async deleteTodo(id) {
@@ -73,7 +76,8 @@
                     this.todos = response.data
                     window.location.reload()
                 } catch(error) {
-                    console.log(error)
+                    this.errors = error.response.data
+                    console.log(this.errors)
                 }
             }
         },
@@ -81,7 +85,7 @@
             let token = this.$store.getters.getToken
             axios.get('/todo/', { headers: { "Authorization":  `${token}`} })
                 .then(todos => {
-                    console.log(todos.data)
+                    // console.log(todos.data)
                     this.$store.state.todos = todos.data
                 }).catch(error => console.log(error))
         }

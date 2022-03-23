@@ -83,7 +83,7 @@ router.post('/login', (req, res) => {
                         res.status(200).json({ token, user})
                     })
                 } else {
-                    errors.password = 'Password incorrect'
+                    errors.password = 'Incorrect password'
                     res.status(400).json(errors)
                 }
             })

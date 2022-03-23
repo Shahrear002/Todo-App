@@ -1,9 +1,11 @@
 <template>
   <div id="signup">
     <div class="signup-form">
+      <h1>To-Do App</h1>
       <form @submit.prevent="onSubmit">
           <div class="input">
             <label for="name">Name</label>
+            <p v-if="errors.name" class="alert alert-danger">{{ errors.name }}</p>
             <input
                 type="text"
                 id="name"
@@ -11,6 +13,7 @@
         </div>
         <div class="input">
           <label for="email">Mail</label>
+          <p v-if="errors.email" class="alert alert-danger">{{ errors.email }}</p>
           <input
                 type="email"
                 id="email"
@@ -18,6 +21,7 @@
         </div>
         <div class="input">
           <label for="password">Password</label>
+          <p v-if="errors.password" class="alert alert-danger">{{ errors.password }}</p>
           <input
                 type="password"
                 id="password"
@@ -27,6 +31,7 @@
           <button type="submit">Submit</button>
         </div>
       </form>
+      <p style="text-align: center; padding-top: 10px">Already have an account ? <a href="/signin">Login</a></p>
     </div>
   </div>
 </template>
@@ -39,7 +44,8 @@
       return {
         name: '',
         email: '',
-        password: ''
+        password: '',
+        errors: {}
       }
     },
     methods: {
@@ -52,13 +58,24 @@
         console.log(formData)
         axios.post('/users/register', formData)
           .then(res => console.log(res))
-          .catch(error => console.log(error))
+          .catch(error => {
+            this.errors = error.response.data
+            console.log(error.response.data)
+          })
       }
     }
   }
 </script>
 
 <style scoped>
+  .h1 {
+    text-align: center;
+  }
+
+  .signup {
+    background-color: #7a2f2f;
+  }
+
   .signup-form {
     width: 400px;
     margin: 30px auto;

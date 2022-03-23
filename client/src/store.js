@@ -11,7 +11,7 @@ const store = createStore({
     },
     plugins: [ 
         createPersistedState({
-            paths: ['user', 'token', 'todos']
+            paths: ['user', 'token', 'todos', 'errors']
         }) 
     ],
     getters: {
@@ -57,8 +57,10 @@ const store = createStore({
         logout: ({ commit }) => {
             commit('logout')
         },
-        autoLogot: ({ commit }) => {
+        autoLogout: ({ commit }) => {
+            console.log('auto logout initiated')
             setTimeout(() => {
+                console.log('auto logged out')
                 commit('logout')
               }, 1200000)
         }
