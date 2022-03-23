@@ -62,7 +62,7 @@ router.post('/add-todo', passport.authenticate('jwt', { session: false }), (req,
 router.delete('/delete-todo/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     const id = req.params
     const userId = req.user
-
+    
     Todo_model.deleteOne(id).then(() => {
         Todo_model.find({user: userId}).then(todos => {
             // console.log(todos)
