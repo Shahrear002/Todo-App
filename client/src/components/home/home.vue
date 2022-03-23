@@ -2,8 +2,8 @@
     <app-header></app-header>
     <div class="container mt-5">
         <form class="d-flex" @submit="addTodo">
-            <input type="text" class="forrm-control" placeholder="Enter Todo" v-model="todo">
-            <input type="submit" value="Add" class="brn btn-md btn-primary mx-3">
+            <input type="text" class="form-control" placeholder="Enter Todo" v-model="todo">
+            <input type="submit" value="Add" class="btn btn-md btn-primary mx-3">
         </form>
         <ul class="list-group mt-5">
             <li class="list-group-item hov libasic" 
@@ -11,9 +11,9 @@
                 :class="{ done: todo.done }"
             >
                 {{ todo.todo }}
-                <span v-if="todo.done == false">
-                    <button class="btn btn-success btn-small" style="margin-right:3px">Done</button>
-                    <button class="btn btn-danger">Delete</button>
+                <span>
+                    <button v-if="todo.done == false" class="btn btn-success btn-small" style="margin-right:3px" @click="updateTodo(todo._id)">Done</button>
+                    <button class="btn btn-danger" @click="deleteTodo(todo._id)">Delete</button>
                 </span>
             </li>
         </ul>
@@ -31,7 +31,6 @@
         },
         data() {
             return {
-                token: null,
                 todo: null,
                 errMessage: null
             }
@@ -45,17 +44,36 @@
             // ...mapGetters(["getToken", "getUser"]),
             async addTodo() {
                 try {
-                    this.token = this.$store.getters.getToken
-                    console.log('token ' + this.token)
+                    let token = this.$store.getters.getToken
+                    console.log('token ' + token)
+                    console.log('todo ' + this.todo)
                     // console.log('userID ' + this.user_id)
-                    let response = await axios.get('/todo/add-todo', { headers: { "Authorization":  `${this.token}`} })
+                    let response = await axios.post('/todo/add-todo', { todo: this.todo }, { headers: { "Authorization":  `${token}`} })
                     this.todos = response.data
                 } catch (error) {
-                    if(error.response.status === 401) {
-                        this.errMessage = 'Session expired! Log In again.'
-                        this.$store.dispatch('logout')
-                    }
                     console.log(error.response)
+                }
+            },
+            async updateTodo(id) {
+                try {
+                    let token = this.$store.getters.getToken
+                    let response = await axios.put('/todo/update-todo/' + id, {}, { headers: { "Authorization": `${token}`}})
+                    console.log('response' + response.data)
+                    this.todos = response.data
+                    window.location.reload()
+                } catch(error) {
+                    console.log(error.response)
+                }
+            },
+            async deleteTodo(id) {
+                try {
+                    let token = this.$store.getters.getToken
+                    let response = await axios.delete('/todo/delete-todo/' + id, { headers: { "Authorization": `${token}`}})
+                    // this.todos = null
+                    this.todos = response.data
+                    window.location.reload()
+                } catch(error) {
+                    console.log(error)
                 }
             }
         },

@@ -1,7 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
-const Todo = require('../model/Todo')
 
 //Load todo model
 const Todo_model = require('../model/Todo')
@@ -15,7 +14,7 @@ const validateTodoInput = require('../validation/todo')
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => {
     const { id } = req.user
     
-    Todo.find({ user: id }).then(todos => {
+    Todo_model.find({ user: id }).then(todos => {
         res.status(200).json(todos)
     }).catch(error => console.log(error))
 })
@@ -27,7 +26,7 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), (req, res) 
     const { _id } = req.user
     const { id } = req.params
 
-    Todo.findById({ _id: id, user: _id }).then(todo => {
+    Todo_model.findById({ _id: id, user: _id }).then(todo => {
         res.status(200).json(todo)
     }).catch(error => console.log(error))
 })
@@ -47,9 +46,9 @@ router.post('/add-todo', passport.authenticate('jwt', { session: false }), (req,
         const newtodo = new Todo_model({todo, done: false, user: _id })
 
         newtodo.save()
-            .then(() => {
-                console.log('done')
-                res.status(200).json('Task Added')
+            .then((todos) => {
+                // console.log(todos)
+                res.status(200).json(todos)
             })
             .catch(err => {
                 console.log(err)
@@ -62,10 +61,13 @@ router.post('/add-todo', passport.authenticate('jwt', { session: false }), (req,
 // @access Private
 router.delete('/delete-todo/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
     const id = req.params
+    const userId = req.user
 
     Todo_model.deleteOne(id).then(() => {
-        console.log('deleted!')
-        res.status(200).json('Task Deleted')
+        Todo_model.find({user: userId}).then(todos => {
+            // console.log(todos)
+            res.status(200).json(todos)
+        })
     }).catch(err => console.log(err))
 })
 
@@ -73,11 +75,17 @@ router.delete('/delete-todo/:id', passport.authenticate('jwt', { session: false 
 // @description adding todo
 // @access Private
 router.put('/update-todo/:id', passport.authenticate('jwt', { session: false }), (req, res) => {
-    const id = req.params
+    const id = req.params.id
+    const userId = req.user
 
-    Todo_model.updateOne({id}, { done: true }).then(() => {
-        res.status(200).json('Task done!')
+    Todo_model.findByIdAndUpdate({_id: id}, { done: true }, { new: true }).then(() => {
+        Todo_model.find({user: userId}).then(todos => {
+            // console.log(todos)
+            res.status(200).json(todos)
+        })
+        
     }).catch(err => console.log(err))
 })
+
 
 module.exports = router

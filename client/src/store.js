@@ -56,6 +56,11 @@ const store = createStore({
         },
         logout: ({ commit }) => {
             commit('logout')
+        },
+        autoLogot: ({ commit }) => {
+            setTimeout(() => {
+                commit('logout')
+              }, 1200000)
         }
     }
 })

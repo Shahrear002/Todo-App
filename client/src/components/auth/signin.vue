@@ -62,9 +62,7 @@
       }
     },
     created() {
-      setTimeout(() => {
-        this.$store.dispatch('logout')
-      }, 1200000)
+      this.$store.dispatch('autoLogout')
     },
   }
 
