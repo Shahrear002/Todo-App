@@ -49,19 +49,22 @@
       }
     },
     methods: {
-      onSubmit () {
+      async onSubmit () {
         const formData = {
             name: this.name,
             email: this.email,
             password: this.password
         }
-        console.log(formData)
-        axios.post('/users/register', formData)
-          .then(res => console.log(res))
-          .catch(error => {
+        // console.log(formData)
+        try {
+          console.log(process.env.VUE_APP_BASE_URL)
+          await axios.post('/users/register', formData)
+          // console.log(response.data)
+          this.$router.push('/signin')
+        } catch(error) {
             this.errors = error.response.data
             console.log(error.response.data)
-          })
+        }
       }
     }
   }

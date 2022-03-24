@@ -7,7 +7,7 @@ import store from './store'
 import router from './router'
 
 dotenv.config()
-axios.defaults.baseURL = process.env.BASE_URL
+axios.defaults.baseURL = process.env.VUE_APP_BASE_URL || process.env.BASE_URL
 
 // axios.interceptors.request.use(config => {
 //     console.log('Request Interceptor', config)
