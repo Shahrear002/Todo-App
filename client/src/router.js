@@ -10,8 +10,8 @@ import SigninPage from './components/auth/signin.vue'
 //Vue.use(VueRouter)
 
 const routes = [
-    { path: '/', component: HomePage},
     { path: '/landing', component: LandingPage },
+    { path: '/', component: HomePage},
     { path: '/signup', component: SignupPage },
     { path: '/signin', component: SigninPage },
     { path: '/:catchAll(.*)', redirect: 'landing' }
@@ -26,7 +26,7 @@ router.beforeEach((to, from, next) => {
     store.dispatch('fetchToken')
     if(to.fullPath === '/'){
         if(!store.state.token) {
-            next('/signin')
+            next('/landing')
         }
     }
 
