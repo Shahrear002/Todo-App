@@ -1,11 +1,13 @@
 import "bootstrap/dist/css/bootstrap.css"
 import { createApp } from 'vue'
+import dotenv from 'dotenv'
 import App from './App.vue'
 import axios from 'axios'
 import store from './store'
 import router from './router'
 
-axios.defaults.baseURL = 'http://localhost:3000'
+dotenv.config()
+axios.defaults.baseURL = process.env.BASE_URL
 
 // axios.interceptors.request.use(config => {
 //     console.log('Request Interceptor', config)
